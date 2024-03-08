@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
-
-
+{% load static %}
 {% block content %}
 
 <style>
@@ -11,11 +10,28 @@
         max-width: 75%;
         margin: 0 auto;
     }
+    .from_me, .to_me {
+        background-color: rgb(204, 155, 155);
+        text-align: right;
+        padding: 5px 10px;
+        border-radius: 12px;
+        margin: 20px 0;
+        font-size: 24px;
+    }
+    .to_me {
+        background-color: rgb(132, 217, 121);
+        text-align-last: left;
+
+    }
+
+    ul, li {
+        list-style: none;
+    }
 
 </style>
-<!-- TODO: #2 connect to ws and get messages for me -->
 <div class="container">
-    <form method="post" class="mt-5">
+
+    <form action="" method="post" class="mt-5" id="message__form">
         {% csrf_token %}
         {% for form in forms %}
             <div>
@@ -25,6 +41,37 @@
         {% endfor %}
         <input type="submit" value="Submit" class="form-control w-100">
     </form>
+    <ul id="messages">
+        {% for message in messages %}
+            {% if message.sender.username == request.user.username %}
+                <li class="from_me">from me: {{message}}</li>
+            {% else %}
+                <li class="to_me">from {{message.sender}}: {{message}}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 </div>
+
+<!-- <script>
+    const user_id = Math.random().toString(16).slice(2);
+    const message_form = document.getElementById("message__form");
+    const messages_ul = document.getElementById("messages");
+
+    // Send
+    const socket = new WebSocket("ws://{{host}}:{{port}}");
+    socket.onopen = () => {
+        console.log("Connected")
+    }
+    socket.onmessage = (event) => {
+        console.log(event.data);
+        const message = JSON.parse(event.data);
+        const li_item = document.createElement("li");
+        li_item.textContent = message.text;
+        li_item.classList.add('to_me')
+        messages_ul.appendChild(li_item);
+    }
+</script> -->
+
+<!-- <script src="{% static 'js/ws.js' %}"></script> -->
 
 {% endblock content %}

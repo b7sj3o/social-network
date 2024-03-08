@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container">
+    <h1 class="text-center fs-1 fw-bold">REGISTER</h1>
+    <form method="post" class="mt-5" id="message__form">
+        {% csrf_token %}
+        {% for item in form %}
+            <div>
+                <label for="">{{ item.label }}</label>
+                {{ item }}
+            </div>
+        {% endfor %}
+        <input type="submit" value="Submit" class="form-control w-100">
+    </form>
+    
+</div>
+
+
+{% endblock content %}
